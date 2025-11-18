@@ -1,0 +1,30 @@
+[
+    {
+        "merged": "com.novella.app-debug-73:/font_roboto_regular.xml.flat",
+        "source": "com.novella.app-main-75:/font/roboto_regular.xml"
+    },
+    {
+        "merged": "com.novella.app-debug-73:/font_noto_sans_arabic_bold.xml.flat",
+        "source": "com.novella.app-main-75:/font/noto_sans_arabic_bold.xml"
+    },
+    {
+        "merged": "com.novella.app-debug-73:/font_roboto_bold.xml.flat",
+        "source": "com.novella.app-main-75:/font/roboto_bold.xml"
+    },
+    {
+        "merged": "com.novella.app-debug-73:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.novella.app-main-75:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.novella.app-debug-73:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.novella.app-main-75:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.novella.app-debug-73:/font_noto_naskh_arabic_regular.xml.flat",
+        "source": "com.novella.app-main-75:/font/noto_naskh_arabic_regular.xml"
+    },
+    {
+        "merged": "com.novella.app-debug-73:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.novella.app-main-75:/drawable/ic_launcher_foreground.xml"
+    }
+]

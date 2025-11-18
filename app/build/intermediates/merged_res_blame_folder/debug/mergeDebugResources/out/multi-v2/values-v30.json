@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.novella.app-mergeDebugResources-71:/values-v30/values-v30.xml",
+            "map": [
+                {
+                    "source": "/Users/mashal/.gradle/caches/transforms-4/f9cffebea746837b26dd1e9d63a8d5bd/transformed/jetified-material3-release/res/values-v30/values-v30.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "72",
+                        "endOffsets": "123"
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Novella</string>
+    <string name="login_with_google">Sign in with Google</string>
+    <string name="welcome_text">Welcome to Novella</string>
+    <string name="start_now">Start Now with Novella</string>
+    <string name="start_reading">Start Reading</string>
+    <string name="download_offline">Download Offline</string>
+    <string name="downloaded">Downloaded</string>
+    <string name="retry">Retry</string>
+    <string name="no_results">Sorry, no matching novel in Novella</string>
+    <string name="try_another">We didn\'t find what you\'re looking for, try another word</string>
+    <string name="empty_section">No novels in this section right now</string>
+</resources>

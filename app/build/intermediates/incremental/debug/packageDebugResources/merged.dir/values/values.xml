@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="com_google_android_gms_fonts_certs">
+        <item>@array/com_google_android_gms_fonts_certs_dev</item>
+    </array>
+    <array name="com_google_android_gms_fonts_certs_dev">
+        <item>
+            MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArY3jLe0Z4rF3bS9Z
+            c4W2KIiMzFxLr0X58F3RrgPf63eNbUsVTNff7kwh28ykVfoCENKz7LxyzKDn5Xxh
+            1zMCEiBzKBslZx2drXr/7EQo1gChX2NDVYqoQZnQXtNCmieYwgd0CQpZK0s8AjtK
+            2qXWiwxupCSvJzpuG1HsfrN7kYM/q9n32CuWHa3gwxM/H2ymlk/wEYBLETymFcpn
+            YGsyhQOdE31E4n4t4tPcNI0+vrFica8FWHZpizxgxYkWwaP42gnikIze8ih/7gTo
+            t7x1YgnPZXoqBYwygJyI072QtdgQXl3k5iADG7n2AFDzy83H8XTur2qxGn8pY/+b
+            QwIDAQAB
+        </item>
+    </array>
+    <color name="ic_launcher_background">#121212</color>
+    <string name="app_name">Novella</string>
+    <string name="download_offline">Download Offline</string>
+    <string name="downloaded">Downloaded</string>
+    <string name="empty_section">No novels in this section right now</string>
+    <string name="gcm_defaultSenderId" translatable="false">1098727643558</string>
+    <string name="google_api_key" translatable="false">AIzaSyAB8rsorOCuv-HczqwrsPT9r82y-P3dF9s</string>
+    <string name="google_app_id" translatable="false">1:1098727643558:android:15af18cd0fff1cbd171767</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyAB8rsorOCuv-HczqwrsPT9r82y-P3dF9s</string>
+    <string name="google_storage_bucket" translatable="false">novella-b1384.firebasestorage.app</string>
+    <string name="login_with_google">Sign in with Google</string>
+    <string name="no_results">Sorry, no matching novel in Novella</string>
+    <string name="project_id" translatable="false">novella-b1384</string>
+    <string name="retry">Retry</string>
+    <string name="start_now">Start Now with Novella</string>
+    <string name="start_reading">Start Reading</string>
+    <string name="try_another">We didn\'t find what you\'re looking for, try another word</string>
+    <string name="welcome_text">Welcome to Novella</string>
+    <style name="Theme.Novella" parent="@android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/black</item>
+    </style>
+</resources>

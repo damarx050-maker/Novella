@@ -1,0 +1,30 @@
+R_DEF: Internal format may change without notice
+local
+array com_google_android_gms_fonts_certs
+array com_google_android_gms_fonts_certs_dev
+color ic_launcher_background
+drawable ic_launcher_foreground
+font noto_naskh_arabic_regular
+font noto_sans_arabic_bold
+font roboto_bold
+font roboto_regular
+mipmap ic_launcher
+mipmap ic_launcher_round
+string app_name
+string download_offline
+string downloaded
+string empty_section
+string gcm_defaultSenderId
+string google_api_key
+string google_app_id
+string google_crash_reporting_api_key
+string google_storage_bucket
+string login_with_google
+string no_results
+string project_id
+string retry
+string start_now
+string start_reading
+string try_another
+string welcome_text
+style Theme.Novella

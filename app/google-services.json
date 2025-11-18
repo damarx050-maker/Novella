@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1098727643558",
+    "project_id": "novella-b1384",
+    "storage_bucket": "novella-b1384.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1098727643558:android:15af18cd0fff1cbd171767",
+        "android_client_info": {
+          "package_name": "com.novella.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAB8rsorOCuv-HczqwrsPT9r82y-P3dF9s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
