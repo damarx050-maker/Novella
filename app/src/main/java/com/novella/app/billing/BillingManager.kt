@@ -20,12 +20,31 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
 class BillingManager(app: Application, private val repo: BillingRepository) {
-    private val client = PlayBillingClient(app, onPurchases = { purchases ->
-        scope.launch { persistPurchases(purchases) }
-    })
+    private val scope = CoroutineScope(Dispatchers.IO)
     private val _activeSubscriptions = MutableStateFlow<List<Purchase>>(emptyList())
     val activeSubscriptions: StateFlow<List<Purchase>> = _activeSubscriptions
-    private val scope = CoroutineScope(Dispatchers.IO)
+
+    // Public flows per spec
+    val isSubscribed: StateFlow<Boolean> = MutableStateFlow(false)
+    private val _ownedSkus = MutableStateFlow<Set<String>>(emptySet())
+    val ownedSkus: StateFlow<Set<String>> = _ownedSkus
+    private val _purchaseEvents = kotlinx.coroutines.flow.MutableSharedFlow<Purchase>(extraBufferCapacity = 8)
+    val purchaseEvents: kotlinx.coroutines.flow.SharedFlow<Purchase> = _purchaseEvents
+    private val _billingErrors = kotlinx.coroutines.flow.MutableSharedFlow<String>(extraBufferCapacity = 8)
+    val billingErrors: kotlinx.coroutines.flow.SharedFlow<String> = _billingErrors
+
+    private val client = PlayBillingClient(
+        app,
+        onPurchases = { purchases ->
+            scope.launch {
+                purchases.forEach { _purchaseEvents.tryEmit(it) }
+                persistPurchases(purchases)
+            }
+        },
+        onError = { result ->
+            _billingErrors.tryEmit("${'$'}{result.responseCode}: ${'$'}{result.debugMessage}")
+        }
+    )
 
     fun start() { client.startConnection() }
 
@@ -40,6 +59,8 @@ class BillingManager(app: Application, private val repo: BillingRepository) {
                 repo.persistPurchase(PurchaseEntity(productId = id, type = type, status = "ACTIVE"))
             }
         }
+        // Update owned SKUs snapshot
+        _ownedSkus.value = purchases.flatMap { it.products }.toSet()
     }
 
     private fun acknowledge(purchase: Purchase) {

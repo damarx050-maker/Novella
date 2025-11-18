@@ -6,6 +6,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -25,9 +26,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.novella.app.theme.NovellaBackground
 import com.novella.app.theme.NovellaPrimary
-import com.novella.app.theme.NovellaTextPrimary
 import com.novella.app.utils.UiStrings
 import com.novella.app.viewmodel.AuthViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -89,7 +88,7 @@ fun LoginScreen(onLoggedIn: () -> Unit, authVm: AuthViewModel = hiltViewModel())
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = "Novella", color = NovellaTextPrimary, fontSize = 36.sp)
+            Text(text = "Novella", color = MaterialTheme.colorScheme.onSurface, fontSize = 36.sp)
             Spacer(Modifier.height(24.dp))
             Card(
                 colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E1E)),
@@ -97,7 +96,7 @@ fun LoginScreen(onLoggedIn: () -> Unit, authVm: AuthViewModel = hiltViewModel())
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = UiStrings.welcome(), color = NovellaTextPrimary)
+                    Text(text = UiStrings.welcome(), color = MaterialTheme.colorScheme.onSurface)
                     Spacer(Modifier.height(16.dp))
                     Button(
                         onClick = { launcher.launch(googleClient.signInIntent) },

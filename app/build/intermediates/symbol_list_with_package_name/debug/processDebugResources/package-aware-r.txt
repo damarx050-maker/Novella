@@ -280,6 +280,7 @@ string android_credentials_TYPE_PASSWORD_CREDENTIAL
 string androidx_credentials_TYPE_PUBLIC_KEY_CREDENTIAL
 string androidx_startup
 string app_name
+string buy_this_novel
 string call_notification_answer_action
 string call_notification_answer_video_action
 string call_notification_decline_action
@@ -382,9 +383,14 @@ string m3c_time_picker_period_toggle_description
 string m3c_time_picker_pm
 string m3c_tooltip_long_press_label
 string m3c_tooltip_pane_description
+string manage_subscription
+string monthly_plan_price
+string monthly_plan_subtitle
+string monthly_plan_title
 string navigation_menu
 string no_results
 string not_selected
+string premium_badge
 string project_id
 string range_end
 string range_start
@@ -396,6 +402,9 @@ string state_empty
 string state_off
 string state_on
 string status_bar_notification_info_overflow
+string subscribe_monthly
+string subscribe_now
+string subscribe_yearly
 string switch_role
 string tab
 string template_percent
@@ -403,6 +412,9 @@ string tooltip_description
 string tooltip_label
 string try_another
 string welcome_text
+string yearly_plan_price
+string yearly_plan_subtitle
+string yearly_plan_title
 style DialogWindowTheme
 style EdgeToEdgeFloatingDialogTheme
 style EdgeToEdgeFloatingDialogWindowTheme

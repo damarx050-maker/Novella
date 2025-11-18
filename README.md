@@ -35,28 +35,77 @@ Kotlin + Jetpack Compose + Room + Firebase (Auth, Firestore, Storage) + Google P
 
 ### 3) Google Play Billing
 - In Play Console, create products:
-  - `novella_monthly_15` (subscription, 15 AED/month)
-  - `novella_yearly_135` (subscription, 135 AED/year)
-  - `novella_single_5` (in-app, 5 AED)
+  - `novella_monthly` (subscription)
+  - `novella_yearly` (subscription)
+  - `novella_single_purchase` (in-app, per paid novel)
 - Implement purchase flow in `BillingManager` and persist `PurchaseEntity` locally.
 
+## Billing Overview
+
+- Products (configure in Play Console):
+  - Subscriptions: `novella_monthly`, `novella_yearly`
+  - One-time purchase: `novella_single_purchase` (per paid novel)
+
+- Client Integration:
+  - Dependency: `com.android.billingclient:billing-ktx` (already added via Gradle)
+  - `BillingManager` exposes:
+    - `isSubscribed: StateFlow<Boolean>`
+    - `ownedSkus: StateFlow<Set<String>>`
+    - `purchaseEvents: SharedFlow<Purchase>`
+    - `billingErrors: SharedFlow<String>`
+  - Use `launchPurchase(activity, productId, isSubscription)` for purchase flows.
+
+- Access Rules:
+  - Free novels: Open content directly.
+  - Premium novels:
+    - If subscribed (monthly/yearly): access granted.
+    - If purchased (`novella_single_purchase` for that novel): access granted.
+    - Otherwise: show a paywall (BottomSheet) offering buy-single or subscribe.
+
+- Adding a new paid novel:
+  1) Create the one-time product in Play Console under `novella_single_purchase_<NOVEL_ID>` if you want individualized SKUs; or use a generic `novella_single_purchase` and gate by entitlement.
+  2) Ensure `canAccess(novel)` in repository checks subscription first, then ownership by novel id.
+
+## Design System (Material3)
+
+- Colors (Dark):
+  - Primary `#9E8BF5`, Secondary `#64D2FF`, Background `#0B0B0D`, Surface `#121214`, SurfaceVariant `#1A1A1D`, OnSurface `#E8E9ED`, Outline `#2A2A2E`, AccentGold `#FFD54F`, Error `#FF4D5A`.
+- Shapes:
+  - Card radius 16dp, Button radius 12dp, Badge capsule 999dp.
+- Motion:
+  - Enter/Exit 200ms, Pressed 120ms, easing FastOutSlowIn.
+
+## Screenshots
+
+Add screenshots before merging: Home, Detail, Subscription, Premium Badge.
+
+ 
 ### 4) Build & Run
+
 Open in Android Studio and click Run. If you haven't added `google-services.json`, the project still builds due to conditional plugin, but Firebase calls will no-op.
 
+ 
 ### 5) Offline PDFs
+
 - PDFs are stored under `filesDir/novels/{novelId}.pdf`.
 - Covers are cached by Coil (disk cache enabled by default).
 
+ 
 ## Localization
+
 - Arabic and English string resources in `values-ar/` and `values/`.
 - Toggle language via the top bar globe icon; switches RTL/LTR instantly and typography.
 
+ 
 ## Next Steps (implementation)
+
 - Hook Google Sign-In intent and result in `LoginScreen` and persist login.
 - Replace `dummyRepo()` usages with DI wiring (Hilt or manual) to real Room + Firestore.
 - Implement PDF rendering via `PdfRenderer` or a 3rd-party viewer.
 - Add subscription and one-time purchase flows with UI badges and gating in Details/Reader.
 - Add retry/error surfaces and network monitoring.
 
+ 
 ## Firestore Security (example)
+
 Configure Firestore/Storage security rules appropriate for your public content and purchases.

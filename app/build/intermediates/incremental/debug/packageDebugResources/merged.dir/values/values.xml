@@ -16,6 +16,7 @@
     </array>
     <color name="ic_launcher_background">#121212</color>
     <string name="app_name">Novella</string>
+    <string name="buy_this_novel">Buy this novel</string>
     <string name="download_offline">Download Offline</string>
     <string name="downloaded">Downloaded</string>
     <string name="empty_section">No novels in this section right now</string>
@@ -25,13 +26,24 @@
     <string name="google_crash_reporting_api_key" translatable="false">AIzaSyAB8rsorOCuv-HczqwrsPT9r82y-P3dF9s</string>
     <string name="google_storage_bucket" translatable="false">novella-b1384.firebasestorage.app</string>
     <string name="login_with_google">Sign in with Google</string>
+    <string name="manage_subscription">Manage Subscription</string>
+    <string name="monthly_plan_price">See price in Play</string>
+    <string name="monthly_plan_subtitle">Unlimited access billed monthly</string>
+    <string name="monthly_plan_title">Monthly Plan</string>
     <string name="no_results">Sorry, no matching novel in Novella</string>
+    <string name="premium_badge">Premium</string>
     <string name="project_id" translatable="false">novella-b1384</string>
     <string name="retry">Retry</string>
     <string name="start_now">Start Now with Novella</string>
     <string name="start_reading">Start Reading</string>
+    <string name="subscribe_monthly">Subscribe Monthly</string>
+    <string name="subscribe_now">Subscribe Now</string>
+    <string name="subscribe_yearly">Subscribe Yearly</string>
     <string name="try_another">We didn\'t find what you\'re looking for, try another word</string>
     <string name="welcome_text">Welcome to Novella</string>
+    <string name="yearly_plan_price">See price in Play</string>
+    <string name="yearly_plan_subtitle">Save with annual billing</string>
+    <string name="yearly_plan_title">Yearly Plan</string>
     <style name="Theme.Novella" parent="@android:style/Theme.Material.Light.NoActionBar">
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/black</item>

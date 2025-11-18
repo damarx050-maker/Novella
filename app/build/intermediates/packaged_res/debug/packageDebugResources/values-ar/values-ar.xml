@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Novella</string>
+    <string name="buy_this_novel">شراء هذه الرواية</string>
     <string name="download_offline">تحميل أوفلاين</string>
     <string name="downloaded">تم التحميل</string>
     <string name="empty_section">لا توجد روايات في هذا القسم حاليًا</string>
     <string name="login_with_google">تسجيل الدخول باستخدام Google</string>
+    <string name="manage_subscription">إدارة الاشتراك</string>
+    <string name="monthly_plan_price">عرض السعر في المتجر</string>
+    <string name="monthly_plan_subtitle">وصول غير محدود مع دفع شهري</string>
+    <string name="monthly_plan_title">الخطة الشهرية</string>
     <string name="no_results">عذرًا، لا توجد رواية بهذا الاسم في Novella</string>
+    <string name="premium_badge">مدفوع</string>
     <string name="retry">إعادة المحاولة</string>
     <string name="start_now">ابدأ الآن مع Novella</string>
     <string name="start_reading">ابدأ القراءة</string>
+    <string name="subscribe_monthly">اشتراك شهري</string>
+    <string name="subscribe_now">اشترك الآن</string>
+    <string name="subscribe_yearly">اشتراك سنوي</string>
     <string name="try_another">لم نجد ما تبحث عنه، جرّب كلمة أخرى</string>
     <string name="welcome_text">مرحبًا بك في Novella</string>
+    <string name="yearly_plan_price">عرض السعر في المتجر</string>
+    <string name="yearly_plan_subtitle">وفّر مع الدفع السنوي</string>
+    <string name="yearly_plan_title">الخطة السنوية</string>
 </resources>

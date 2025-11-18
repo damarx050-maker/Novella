@@ -423,45 +423,45 @@ public final class DaggerNovellaApplication_HiltComponents_SingletonC {
 
     @IdentifierNameString
     private static final class LazyClassKeyProvider {
-      static String com_novella_app_viewmodel_DetailsViewModel = "com.novella.app.viewmodel.DetailsViewModel";
-
-      static String com_novella_app_viewmodel_HomeViewModel = "com.novella.app.viewmodel.HomeViewModel";
-
-      static String com_novella_app_viewmodel_ReaderViewModel = "com.novella.app.viewmodel.ReaderViewModel";
+      static String com_novella_app_viewmodel_AuthViewModel = "com.novella.app.viewmodel.AuthViewModel";
 
       static String com_novella_app_viewmodel_BillingViewModel = "com.novella.app.viewmodel.BillingViewModel";
 
-      static String com_novella_app_viewmodel_LibraryViewModel = "com.novella.app.viewmodel.LibraryViewModel";
+      static String com_novella_app_viewmodel_ReaderViewModel = "com.novella.app.viewmodel.ReaderViewModel";
 
-      static String com_novella_app_viewmodel_AuthViewModel = "com.novella.app.viewmodel.AuthViewModel";
-
-      static String com_novella_app_viewmodel_OnboardingViewModel = "com.novella.app.viewmodel.OnboardingViewModel";
+      static String com_novella_app_viewmodel_HomeViewModel = "com.novella.app.viewmodel.HomeViewModel";
 
       static String com_novella_app_viewmodel_SearchViewModel = "com.novella.app.viewmodel.SearchViewModel";
 
-      @KeepFieldType
-      DetailsViewModel com_novella_app_viewmodel_DetailsViewModel2;
+      static String com_novella_app_viewmodel_OnboardingViewModel = "com.novella.app.viewmodel.OnboardingViewModel";
 
-      @KeepFieldType
-      HomeViewModel com_novella_app_viewmodel_HomeViewModel2;
+      static String com_novella_app_viewmodel_DetailsViewModel = "com.novella.app.viewmodel.DetailsViewModel";
 
-      @KeepFieldType
-      ReaderViewModel com_novella_app_viewmodel_ReaderViewModel2;
-
-      @KeepFieldType
-      BillingViewModel com_novella_app_viewmodel_BillingViewModel2;
-
-      @KeepFieldType
-      LibraryViewModel com_novella_app_viewmodel_LibraryViewModel2;
+      static String com_novella_app_viewmodel_LibraryViewModel = "com.novella.app.viewmodel.LibraryViewModel";
 
       @KeepFieldType
       AuthViewModel com_novella_app_viewmodel_AuthViewModel2;
 
       @KeepFieldType
-      OnboardingViewModel com_novella_app_viewmodel_OnboardingViewModel2;
+      BillingViewModel com_novella_app_viewmodel_BillingViewModel2;
+
+      @KeepFieldType
+      ReaderViewModel com_novella_app_viewmodel_ReaderViewModel2;
+
+      @KeepFieldType
+      HomeViewModel com_novella_app_viewmodel_HomeViewModel2;
 
       @KeepFieldType
       SearchViewModel com_novella_app_viewmodel_SearchViewModel2;
+
+      @KeepFieldType
+      OnboardingViewModel com_novella_app_viewmodel_OnboardingViewModel2;
+
+      @KeepFieldType
+      DetailsViewModel com_novella_app_viewmodel_DetailsViewModel2;
+
+      @KeepFieldType
+      LibraryViewModel com_novella_app_viewmodel_LibraryViewModel2;
     }
   }
 
@@ -525,17 +525,17 @@ public final class DaggerNovellaApplication_HiltComponents_SingletonC {
     private static final class LazyClassKeyProvider {
       static String com_novella_app_viewmodel_AuthViewModel = "com.novella.app.viewmodel.AuthViewModel";
 
-      static String com_novella_app_viewmodel_LibraryViewModel = "com.novella.app.viewmodel.LibraryViewModel";
+      static String com_novella_app_viewmodel_SearchViewModel = "com.novella.app.viewmodel.SearchViewModel";
+
+      static String com_novella_app_viewmodel_BillingViewModel = "com.novella.app.viewmodel.BillingViewModel";
+
+      static String com_novella_app_viewmodel_OnboardingViewModel = "com.novella.app.viewmodel.OnboardingViewModel";
 
       static String com_novella_app_viewmodel_HomeViewModel = "com.novella.app.viewmodel.HomeViewModel";
 
       static String com_novella_app_viewmodel_ReaderViewModel = "com.novella.app.viewmodel.ReaderViewModel";
 
-      static String com_novella_app_viewmodel_BillingViewModel = "com.novella.app.viewmodel.BillingViewModel";
-
-      static String com_novella_app_viewmodel_SearchViewModel = "com.novella.app.viewmodel.SearchViewModel";
-
-      static String com_novella_app_viewmodel_OnboardingViewModel = "com.novella.app.viewmodel.OnboardingViewModel";
+      static String com_novella_app_viewmodel_LibraryViewModel = "com.novella.app.viewmodel.LibraryViewModel";
 
       static String com_novella_app_viewmodel_DetailsViewModel = "com.novella.app.viewmodel.DetailsViewModel";
 
@@ -543,7 +543,13 @@ public final class DaggerNovellaApplication_HiltComponents_SingletonC {
       AuthViewModel com_novella_app_viewmodel_AuthViewModel2;
 
       @KeepFieldType
-      LibraryViewModel com_novella_app_viewmodel_LibraryViewModel2;
+      SearchViewModel com_novella_app_viewmodel_SearchViewModel2;
+
+      @KeepFieldType
+      BillingViewModel com_novella_app_viewmodel_BillingViewModel2;
+
+      @KeepFieldType
+      OnboardingViewModel com_novella_app_viewmodel_OnboardingViewModel2;
 
       @KeepFieldType
       HomeViewModel com_novella_app_viewmodel_HomeViewModel2;
@@ -552,13 +558,7 @@ public final class DaggerNovellaApplication_HiltComponents_SingletonC {
       ReaderViewModel com_novella_app_viewmodel_ReaderViewModel2;
 
       @KeepFieldType
-      BillingViewModel com_novella_app_viewmodel_BillingViewModel2;
-
-      @KeepFieldType
-      SearchViewModel com_novella_app_viewmodel_SearchViewModel2;
-
-      @KeepFieldType
-      OnboardingViewModel com_novella_app_viewmodel_OnboardingViewModel2;
+      LibraryViewModel com_novella_app_viewmodel_LibraryViewModel2;
 
       @KeepFieldType
       DetailsViewModel com_novella_app_viewmodel_DetailsViewModel2;

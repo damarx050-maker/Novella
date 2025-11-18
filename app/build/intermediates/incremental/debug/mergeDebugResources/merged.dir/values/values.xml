@@ -137,6 +137,7 @@
     <string name="androidx.credentials.TYPE_PUBLIC_KEY_CREDENTIAL">Passkey</string>
     <string name="androidx_startup" translatable="false">androidx.startup</string>
     <string name="app_name">Novella</string>
+    <string name="buy_this_novel">Buy this novel</string>
     <string name="call_notification_answer_action">Answer</string>
     <string name="call_notification_answer_video_action">Video</string>
     <string name="call_notification_decline_action">Decline</string>
@@ -243,9 +244,14 @@
     <string name="m3c_time_picker_pm">PM</string>
     <string name="m3c_tooltip_long_press_label">Show tooltip</string>
     <string name="m3c_tooltip_pane_description">Tooltip</string>
+    <string name="manage_subscription">Manage Subscription</string>
+    <string name="monthly_plan_price">See price in Play</string>
+    <string name="monthly_plan_subtitle">Unlimited access billed monthly</string>
+    <string name="monthly_plan_title">Monthly Plan</string>
     <string name="navigation_menu">"Navigation menu"</string>
     <string name="no_results">Sorry, no matching novel in Novella</string>
     <string name="not_selected">Not selected</string>
+    <string name="premium_badge">Premium</string>
     <string name="project_id" translatable="false">novella-b1384</string>
     <string name="range_end">"Range end"</string>
     <string name="range_start">"Range start"</string>
@@ -257,6 +263,9 @@
     <string name="state_off">Off</string>
     <string name="state_on">On</string>
     <string name="status_bar_notification_info_overflow">999+</string>
+    <string name="subscribe_monthly">Subscribe Monthly</string>
+    <string name="subscribe_now">Subscribe Now</string>
+    <string name="subscribe_yearly">Subscribe Yearly</string>
     <string name="switch_role">Switch</string>
     <string name="tab">Tab</string>
     <string name="template_percent"><ns1:g id="percentage">%1$d</ns1:g> percent.</string>
@@ -264,6 +273,9 @@
     <string name="tooltip_label">show tooltip</string>
     <string name="try_another">We didn\'t find what you\'re looking for, try another word</string>
     <string name="welcome_text">Welcome to Novella</string>
+    <string name="yearly_plan_price">See price in Play</string>
+    <string name="yearly_plan_subtitle">Save with annual billing</string>
+    <string name="yearly_plan_title">Yearly Plan</string>
     <style name="DialogWindowTheme">
         <item name="android:windowClipToOutline">false</item>
     </style>
@@ -382,23 +394,14 @@
         <attr format="reference" name="fontProviderCerts"/>
         
         <attr name="fontProviderFetchStrategy">
-            <!-- The blocking font fetch works as follows.
-              First, check the local cache, then if the requested font is not cached, request the
-              font from the provider and wait until it is finished.  You can change the length of
-              the timeout by modifying fontProviderFetchTimeout.  If the timeout happens, the
-              default typeface will be used instead. -->
+            
             <enum name="blocking" value="0"/>
-            <!-- The async font fetch works as follows.
-              First, check the local cache, then if the requeted font is not cached, trigger a
-              request the font and continue with layout inflation. Once the font fetch succeeds, the
-              target text view will be refreshed with the downloaded font data. The
-              fontProviderFetchTimeout will be ignored if async loading is specified. -->
+            
             <enum name="async" value="1"/>
         </attr>
         
         <attr format="integer" name="fontProviderFetchTimeout">
-            <!-- A special value for the timeout. In this case, the blocking font fetching will not
-              timeout and wait until a reply is received from the font provider. -->
+            
             <enum name="forever" value="-1"/>
         </attr>
         

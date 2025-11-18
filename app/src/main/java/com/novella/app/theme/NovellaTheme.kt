@@ -18,9 +18,13 @@ fun NovellaTheme(
 ) {
     val colorScheme = darkColorScheme(
         primary = NovellaPrimary,
-        onPrimary = NovellaTextPrimary,
+        secondary = NovellaSecondary,
         background = NovellaBackground,
-        onBackground = NovellaTextPrimary
+        surface = NovellaSurface,
+        surfaceVariant = NovellaSurfaceVariant,
+        onSurface = NovellaOnSurface,
+        outline = NovellaOutline,
+        error = NovellaError
     )
 
     val typography = if (isArabic) TypographyAR else TypographyEN

@@ -8,9 +8,14 @@ import com.android.billingclient.api.PurchasesUpdatedListener
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class PlayBillingClient(app: Application, private val onPurchases: (List<com.android.billingclient.api.Purchase>) -> Unit = {}) {
+class PlayBillingClient(
+    app: Application,
+    private val onPurchases: (List<com.android.billingclient.api.Purchase>) -> Unit = {},
+    private val onError: (com.android.billingclient.api.BillingResult) -> Unit = {}
+) {
     private val listener = PurchasesUpdatedListener { result, purchases ->
         if (result.responseCode == BillingResponseCode.OK && purchases != null) onPurchases(purchases)
+        else onError(result)
     }
     private val _ready = MutableStateFlow(false)
     val ready: StateFlow<Boolean> = _ready

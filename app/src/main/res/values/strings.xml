@@ -10,4 +10,16 @@
     <string name="no_results">Sorry, no matching novel in Novella</string>
     <string name="try_another">We didn\'t find what you\'re looking for, try another word</string>
     <string name="empty_section">No novels in this section right now</string>
+    <string name="premium_badge">Premium</string>
+    <string name="buy_this_novel">Buy this novel</string>
+    <string name="subscribe_monthly">Subscribe Monthly</string>
+    <string name="subscribe_yearly">Subscribe Yearly</string>
+    <string name="monthly_plan_title">Monthly Plan</string>
+    <string name="monthly_plan_subtitle">Unlimited access billed monthly</string>
+    <string name="monthly_plan_price">See price in Play</string>
+    <string name="yearly_plan_title">Yearly Plan</string>
+    <string name="yearly_plan_subtitle">Save with annual billing</string>
+    <string name="yearly_plan_price">See price in Play</string>
+    <string name="manage_subscription">Manage Subscription</string>
+    <string name="subscribe_now">Subscribe Now</string>
 </resources>
