@@ -128,8 +128,8 @@ private fun SectionRow(category: String, title: String, items: List<NovelEntity>
                 Column(modifier = Modifier.width(140.dp)) {
                     ShimmerBlock(
                         modifier = Modifier
-                            .height(180.dp)
-                            .fillMaxWidth(),
+                            .fillMaxWidth()
+                            .aspectRatio(3f / 4f),
                         shape = RoundedCornerShape(8.dp)
                     )
                     Spacer(Modifier.height(6.dp))
@@ -168,12 +168,16 @@ private fun SectionRow(category: String, title: String, items: List<NovelEntity>
                     AsyncImage(
                         model = novel.coverUrl,
                         contentDescription = novel.title,
-                        modifier = Modifier.height(180.dp).fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(3f / 4f),
                         contentScale = ContentScale.Crop
                     )
                     Spacer(Modifier.height(6.dp))
                     Text(text = novel.title, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     Text(text = novel.author, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Spacer(Modifier.height(2.dp))
+                    Text(text = novel.description, maxLines = 2, overflow = TextOverflow.Ellipsis)
                 }
             }
         }
