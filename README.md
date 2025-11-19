@@ -101,4 +101,4 @@ Configure Firestore/Storage security rules appropriate for your public content a
 
 ## Build Status
 
-![Verify Java Version](https://github.com/<USERNAME>/<REPO>/actions/workflows/java-check.yml/badge.svg)
+![Verify Java Version](https://github.com/damarx050-maker/Novella/actions/workflows/java-check.yml/badge.svg)
