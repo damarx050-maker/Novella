@@ -9,6 +9,8 @@ on:
 jobs:
   coverage:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -23,13 +25,14 @@ jobs:
         run: |
           ./gradlew --no-daemon testDebugUnitTest jacocoTestReport
 
-      - name: Enforce 80% line coverage
+      - name: Compute coverage percent
+        id: cov
         run: |
           REPORT=app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
           if [ ! -f "$REPORT" ]; then echo "Coverage report not found: $REPORT"; exit 1; fi
           python3 - <<'PY'
           import xml.etree.ElementTree as ET
-          import sys
+          import sys, os
           p='app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml'
           t=ET.parse(p).getroot()
           missed=covered=0
@@ -40,5 +43,41 @@ jobs:
           total = missed + covered
           pct = (covered/total*100.0) if total else 0.0
           print(f"LINE_COVERAGE={pct:.2f}% (covered={covered}, missed={missed})")
+          # Write to GITHUB_OUTPUT for later steps
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f"pct={pct:.2f}\n")
+          # Do not fail here so badge generation still runs
+          sys.exit(0)
+          PY
+
+      - name: Prepare badges directory
+        run: |
+          mkdir -p badges
+
+      - name: Generate coverage badge
+        uses: emibcn/badge-action@v2
+        with:
+          label: coverage
+          status: "${{ steps.cov.outputs.pct }}%"
+          color: informational
+          path: badges/jacoco.svg
+
+      - name: Commit badge
+        if: ${{ github.event_name == 'push' }}
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add badges/jacoco.svg
+          git commit -m "docs(coverage): update jacoco.svg badge" || echo "No changes to commit"
+          git push
+
+      - name: Enforce 80% line coverage
+        env:
+          PCT: ${{ steps.cov.outputs.pct }}
+        run: |
+          python3 - <<'PY'
+          import os, sys
+          pct = float(os.environ.get('PCT','0'))
+          print(f"Enforcing threshold: {pct:.2f}% >= 80.00%")
           sys.exit(0 if pct >= 80.0 else 1)
           PY
