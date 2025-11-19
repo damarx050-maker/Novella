@@ -21,7 +21,7 @@ Kotlin + Jetpack Compose + Room + Firebase (Auth, Firestore, Storage) + Google P
 ### Prerequisites
 
 - Android Studio Giraffe or newer
-- JDK 17
+- JDK 21
 
 ### 1) Firebase setup
 
