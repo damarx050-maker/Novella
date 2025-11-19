@@ -22,4 +22,5 @@
     <string name="yearly_plan_price">عرض السعر في المتجر</string>
     <string name="manage_subscription">إدارة الاشتراك</string>
     <string name="subscribe_now">اشترك الآن</string>
+    <string name="view_plans">عرض الخطط</string>
 </resources>

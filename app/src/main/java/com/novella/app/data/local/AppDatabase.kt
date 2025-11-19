@@ -14,7 +14,7 @@ import com.novella.app.data.local.entities.*
         DownloadEntity::class,
         PurchaseEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

@@ -12,5 +12,6 @@ data class NovelEntity(
     val description: String,
     val coverUrl: String,
     val pdfUrl: String,
-    val category: String
+    val category: String,
+    val isPremium: Boolean = false
 )

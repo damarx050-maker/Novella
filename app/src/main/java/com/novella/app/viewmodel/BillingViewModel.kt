@@ -11,12 +11,10 @@ import javax.inject.Inject
 @HiltViewModel
 class BillingViewModel @Inject constructor(private val billing: BillingManager) : ViewModel() {
     fun start() = billing.start()
-    fun buySingle(activity: Activity, productId: String) = billing.launchPurchase(activity, productId, isSubscription = false)
-    fun subscribeMonthly(activity: Activity, productId: String) = billing.launchPurchase(activity, productId, isSubscription = true)
+    fun subscribeMonthly(activity: Activity, productId: String) = billing.launchSubscription(activity, productId)
+    fun subscribeYearly(activity: Activity, productId: String) = billing.launchSubscription(activity, productId)
 
     // Expose flows
     val isSubscribed: StateFlow<Boolean> get() = billing.isSubscribed
-    val ownedSkus: StateFlow<Set<String>> get() = billing.ownedSkus
-    val purchaseEvents: SharedFlow<com.android.billingclient.api.Purchase> get() = billing.purchaseEvents
     val billingErrors: SharedFlow<String> get() = billing.billingErrors
 }

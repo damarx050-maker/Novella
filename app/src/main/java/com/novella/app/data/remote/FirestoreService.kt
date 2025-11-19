@@ -54,13 +54,26 @@ class FirestoreService(
 }
 
 private fun com.google.firebase.firestore.DocumentSnapshot.toNovel(): NovelEntity? {
-    val id = getString("id") ?: id
-    val title = getString("title") ?: return null
-    val author = getString("author") ?: ""
-    val description = getString("description") ?: ""
-    val coverUrl = getString("coverUrl") ?: ""
-    val pdfUrl = getString("pdfUrl") ?: ""
-    val category = getString("category") ?: ""
-    val language = getString("language") ?: "EN"
-    return NovelEntity(id, title, author, language, description, coverUrl, pdfUrl, category)
+    val idValue = getString("id") ?: id
+    val titleValue = getString("title") ?: "عنوان غير متوفر"
+    // If title missing treat entire doc invalid (avoid placeholder pollution)
+    if (titleValue.isBlank()) return null
+    val authorValue = getString("author") ?: "مؤلف غير معروف"
+    val descriptionValue = getString("description") ?: "لا يوجد وصف متاح"
+    val coverUrlValue = getString("coverUrl") ?: ""
+    val pdfUrlValue = getString("pdfUrl") ?: ""
+    val categoryValue = getString("category") ?: ""
+    val languageValue = getString("language") ?: "EN"
+    val isPremiumValue = getBoolean("premium") ?: false
+    return NovelEntity(
+        id = idValue,
+        title = titleValue,
+        author = authorValue,
+        language = languageValue,
+        description = descriptionValue,
+        coverUrl = coverUrlValue,
+        pdfUrl = pdfUrlValue,
+        category = categoryValue,
+        isPremium = isPremiumValue
+    )
 }

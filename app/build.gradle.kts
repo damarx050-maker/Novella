@@ -54,7 +54,19 @@ android {
     }
 
     kotlin {
-        jvmToolchain(17)
+        // Upgrade Kotlin compilation to use JDK 21 toolchain
+        jvmToolchain(21)
+    }
+
+    // Configure Java source/target compatibility for Java 21
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
+    // Ensure Kotlin JVM target bytecode level matches Java 21
+    // (Gradle Kotlin DSL for Android allows setting via tasks if needed)
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+        kotlinOptions.jvmTarget = "21"
     }
 }
 

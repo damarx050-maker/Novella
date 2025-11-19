@@ -28,4 +28,5 @@ object UiStrings {
     @Composable fun yearlyPlanPrice() = stringResource(R.string.yearly_plan_price)
     @Composable fun manageSubscription() = stringResource(R.string.manage_subscription)
     @Composable fun subscribeNow() = stringResource(R.string.subscribe_now)
+    @Composable fun viewPlans() = stringResource(R.string.view_plans)
 }

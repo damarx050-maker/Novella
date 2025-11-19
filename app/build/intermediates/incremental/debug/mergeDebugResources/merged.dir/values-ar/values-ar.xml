@@ -128,6 +128,7 @@
     <string msgid="3765533235322692011" name="tooltip_description">"تلميح"</string>
     <string msgid="3124740595719787496" name="tooltip_label">"إظهار التلميح"</string>
     <string name="try_another">لم نجد ما تبحث عنه، جرّب كلمة أخرى</string>
+    <string name="view_plans">عرض الخطط</string>
     <string name="welcome_text">مرحبًا بك في Novella</string>
     <string name="yearly_plan_price">عرض السعر في المتجر</string>
     <string name="yearly_plan_subtitle">وفّر مع الدفع السنوي</string>

@@ -1,3 +1,4 @@
+@file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 package com.novella.app.ui.details
 
 import androidx.compose.foundation.layout.*
@@ -7,6 +8,8 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -30,12 +33,20 @@ import androidx.compose.runtime.rememberCoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun DetailsScreen(novelId: String, onRead: () -> Unit, vm: DetailsViewModel = hiltViewModel(), storage: StorageService = StorageService(), billingVm: com.novella.app.viewmodel.BillingViewModel = hiltViewModel()) {
+fun DetailsScreen(
+    novelId: String,
+    onRead: () -> Unit,
+    vm: DetailsViewModel = hiltViewModel(),
+    storage: StorageService = StorageService(),
+    billingVm: com.novella.app.viewmodel.BillingViewModel = hiltViewModel(),
+    onOpenSubscription: () -> Unit = {}
+) {
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
     val novel: NovelEntity? by vm.novel(novelId).collectAsState(initial = null)
     val canAccess by (novel?.let { vm.canAccess(it) } ?: kotlinx.coroutines.flow.flowOf(false)).collectAsState(initial = false)
     val showPaywall = novel != null && !canAccess
+    var showSheet = remember { androidx.compose.runtime.mutableStateOf(false) }
     // Keep details screen focused and uncluttered; billing UI handled elsewhere
 
     Scaffold(snackbarHost = { SnackbarHost(hostState = snackbarHostState) }) { padding ->
@@ -57,13 +68,10 @@ fun DetailsScreen(novelId: String, onRead: () -> Unit, vm: DetailsViewModel = hi
                 Text(text = novel?.description ?: "")
                 Spacer(Modifier.height(16.dp))
                 val scope = rememberCoroutineScope()
-                val buyText = UiStrings.buyThisNovel()
                 Button(
                     onClick = {
                         if (showPaywall) {
-                            // Trigger bottom sheet via snackbar for now; could be ModalBottomSheet with actions
-                            // Keeping minimal UI wiring here; SubscriptionScreen provides full flow
-                            scope.launch { snackbarHostState.showSnackbar(buyText) }
+                            showSheet.value = true
                         } else onRead()
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = NovellaPrimary),
@@ -71,18 +79,28 @@ fun DetailsScreen(novelId: String, onRead: () -> Unit, vm: DetailsViewModel = hi
                 ) {
                     Text(UiStrings.startReading(), color = Color.White)
                 }
-                if (showPaywall) {
-                    Spacer(Modifier.height(12.dp))
-                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Button(onClick = {
-                            val act = context as? android.app.Activity ?: return@Button
-                            billingVm.buySingle(act, com.novella.app.billing.BillingProductIds.SINGLE_NOVEL)
-                        }, modifier = Modifier.weight(1f).height(48.dp)) { Text(UiStrings.buyThisNovel()) }
-                        Button(onClick = {
-                            // Navigate to subscription screen in real app; for now, show prompt or direct subscribe monthly
-                            val act = context as? android.app.Activity ?: return@Button
-                            billingVm.subscribeMonthly(act, com.novella.app.billing.BillingProductIds.MONTHLY_SUB)
-                        }, modifier = Modifier.weight(1f).height(48.dp)) { Text(UiStrings.subscribeMonthly()) }
+                if (showPaywall && showSheet.value) {
+                    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+                    ModalBottomSheet(
+                        onDismissRequest = { showSheet.value = false },
+                        sheetState = sheetState
+                    ) {
+                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                            Button(onClick = {
+                                val act = context as? android.app.Activity ?: return@Button
+                                billingVm.subscribeMonthly(act, com.novella.app.billing.BillingProductIds.MONTHLY_SUB)
+                                showSheet.value = false
+                            }, modifier = Modifier.fillMaxWidth().height(48.dp)) { Text(UiStrings.subscribeMonthly()) }
+                            Button(onClick = {
+                                val act = context as? android.app.Activity ?: return@Button
+                                billingVm.subscribeYearly(act, com.novella.app.billing.BillingProductIds.YEARLY_SUB)
+                                showSheet.value = false
+                            }, modifier = Modifier.fillMaxWidth().height(48.dp)) { Text(UiStrings.subscribeYearly()) }
+                            Button(onClick = {
+                                showSheet.value = false
+                                onOpenSubscription()
+                            }, modifier = Modifier.fillMaxWidth().height(48.dp)) { Text(UiStrings.viewPlans()) }
+                        }
                     }
                 }
             }

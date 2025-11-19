@@ -6,9 +6,9 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.QueryProductDetailsParams
-import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.AcknowledgePurchaseParams
+import com.android.billingclient.api.QueryPurchasesParams
 import com.novella.app.data.local.entities.PurchaseEntity
 import com.novella.app.data.repo.BillingRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,15 +21,9 @@ import kotlin.coroutines.resume
 
 class BillingManager(app: Application, private val repo: BillingRepository) {
     private val scope = CoroutineScope(Dispatchers.IO)
-    private val _activeSubscriptions = MutableStateFlow<List<Purchase>>(emptyList())
-    val activeSubscriptions: StateFlow<List<Purchase>> = _activeSubscriptions
-
-    // Public flows per spec
-    val isSubscribed: StateFlow<Boolean> = MutableStateFlow(false)
-    private val _ownedSkus = MutableStateFlow<Set<String>>(emptySet())
-    val ownedSkus: StateFlow<Set<String>> = _ownedSkus
-    private val _purchaseEvents = kotlinx.coroutines.flow.MutableSharedFlow<Purchase>(extraBufferCapacity = 8)
-    val purchaseEvents: kotlinx.coroutines.flow.SharedFlow<Purchase> = _purchaseEvents
+    // Public flows for subscription-only
+    private val _isSubscribed = MutableStateFlow(false)
+    val isSubscribed: StateFlow<Boolean> = _isSubscribed
     private val _billingErrors = kotlinx.coroutines.flow.MutableSharedFlow<String>(extraBufferCapacity = 8)
     val billingErrors: kotlinx.coroutines.flow.SharedFlow<String> = _billingErrors
 
@@ -37,8 +31,9 @@ class BillingManager(app: Application, private val repo: BillingRepository) {
         app,
         onPurchases = { purchases ->
             scope.launch {
-                purchases.forEach { _purchaseEvents.tryEmit(it) }
-                persistPurchases(purchases)
+                // Persist only subscription purchases
+                val subs = purchases.filter { it.products.any { _ -> true } } // will re-validate below
+                persistSubscriptionPurchases(subs)
             }
         },
         onError = { result ->
@@ -46,21 +41,29 @@ class BillingManager(app: Application, private val repo: BillingRepository) {
         }
     )
 
-    fun start() { client.startConnection() }
+    fun start() {
+        client.startConnection()
+        // Track subscription entitlement from repository
+        scope.launch {
+            repo.isSubscriptionActive().collect { _isSubscribed.value = it }
+        }
+        // Restore purchases on startup
+        scope.launch { restorePurchases() }
+    }
 
-    private suspend fun persistPurchases(purchases: List<Purchase>) {
+    private suspend fun persistSubscriptionPurchases(purchases: List<Purchase>) {
         purchases.forEach { p ->
-            val type = if (p.products.any { it.contains("monthly", true) || it.contains("yearly", true) }) "SUBSCRIPTION" else "ONE_TIME"
+            // Keep only products that look like subscription SKUs
+            val isSub = p.products.any { it.contains("monthly", true) || it.contains("yearly", true) }
+            if (!isSub) return@forEach
             val status = if (p.isAcknowledged) "ACTIVE" else "PENDING"
             val id = p.products.firstOrNull() ?: return@forEach
-            repo.persistPurchase(PurchaseEntity(productId = id, type = type, status = status))
-            if (!p.isAcknowledged && type == "SUBSCRIPTION") {
+            repo.persistPurchase(PurchaseEntity(productId = id, type = "SUBSCRIPTION", status = status))
+            if (!p.isAcknowledged) {
                 acknowledge(p)
-                repo.persistPurchase(PurchaseEntity(productId = id, type = type, status = "ACTIVE"))
+                repo.persistPurchase(PurchaseEntity(productId = id, type = "SUBSCRIPTION", status = "ACTIVE"))
             }
         }
-        // Update owned SKUs snapshot
-        _ownedSkus.value = purchases.flatMap { it.products }.toSet()
     }
 
     private fun acknowledge(purchase: Purchase) {
@@ -81,10 +84,9 @@ class BillingManager(app: Application, private val repo: BillingRepository) {
         }
     }
 
-    fun launchPurchase(activity: Activity, productId: String, isSubscription: Boolean) {
+    fun launchSubscription(activity: Activity, productId: String) {
         scope.launch {
-            val type = if (isSubscription) BillingClient.ProductType.SUBS else BillingClient.ProductType.INAPP
-            val details = queryProductDetails(listOf(productId), type).firstOrNull() ?: return@launch
+            val details = queryProductDetails(listOf(productId), BillingClient.ProductType.SUBS).firstOrNull() ?: return@launch
             val offerToken = details.subscriptionOfferDetails?.firstOrNull()?.offerToken
             val productParams = BillingFlowParams.ProductDetailsParams.newBuilder()
                 .setProductDetails(details)
@@ -93,5 +95,18 @@ class BillingManager(app: Application, private val repo: BillingRepository) {
             val flowParams = BillingFlowParams.newBuilder().setProductDetailsParamsList(listOf(productParams)).build()
             client.client.launchBillingFlow(activity, flowParams)
         }
+    }
+
+    suspend fun restorePurchases() {
+        // Query active SUBS only
+        val subsResult = suspendCancellableCoroutine<List<Purchase>> { cont ->
+            val params = QueryPurchasesParams.newBuilder()
+                .setProductType(BillingClient.ProductType.SUBS)
+                .build()
+            client.client.queryPurchasesAsync(params) { _, purchases ->
+                if (!cont.isCompleted) cont.resume(purchases ?: emptyList())
+            }
+        }
+        persistSubscriptionPurchases(subsResult)
     }
 }

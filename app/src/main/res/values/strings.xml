@@ -22,4 +22,5 @@
     <string name="yearly_plan_price">See price in Play</string>
     <string name="manage_subscription">Manage Subscription</string>
     <string name="subscribe_now">Subscribe Now</string>
+    <string name="view_plans">View Plans</string>
 </resources>

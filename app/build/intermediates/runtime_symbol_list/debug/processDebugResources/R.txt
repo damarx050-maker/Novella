@@ -410,10 +410,11 @@ int string template_percent 0x7f0e0083
 int string tooltip_description 0x7f0e0084
 int string tooltip_label 0x7f0e0085
 int string try_another 0x7f0e0086
-int string welcome_text 0x7f0e0087
-int string yearly_plan_price 0x7f0e0088
-int string yearly_plan_subtitle 0x7f0e0089
-int string yearly_plan_title 0x7f0e008a
+int string view_plans 0x7f0e0087
+int string welcome_text 0x7f0e0088
+int string yearly_plan_price 0x7f0e0089
+int string yearly_plan_subtitle 0x7f0e008a
+int string yearly_plan_title 0x7f0e008b
 int style DialogWindowTheme 0x7f0f0000
 int style EdgeToEdgeFloatingDialogTheme 0x7f0f0001
 int style EdgeToEdgeFloatingDialogWindowTheme 0x7f0f0002

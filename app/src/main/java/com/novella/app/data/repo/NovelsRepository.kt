@@ -52,12 +52,16 @@ class NovelsRepository(
         progressDao.upsert(ProgressEntity(novelId, current, total, percent))
     }
 
-    fun canAccess(novel: NovelEntity): Flow<Boolean> = billingRepository.isSubscriptionActive()
-        .flatMapLatest { active ->
-            if (active) kotlinx.coroutines.flow.flowOf(true)
-            else billingRepository.hasOwnership(novel.id)
+    fun canAccess(novel: NovelEntity): Flow<Boolean> =
+        if (!novel.isPremium) {
+            kotlinx.coroutines.flow.flowOf(true)
+        } else {
+            billingRepository.isSubscriptionActive()
+                .flatMapLatest { active ->
+                    kotlinx.coroutines.flow.flowOf(active)
+                }
+                .flowOn(Dispatchers.IO)
         }
-        .flowOn(Dispatchers.IO)
 
     suspend fun markDownloaded(novel: NovelEntity, localPath: String) {
         downloadsDao.upsert(DownloadEntity(novel.id, true, localPath))

@@ -49,6 +49,7 @@ fun HomeScreen(
     onOpenSearch: () -> Unit
 ) {
     val vm: HomeViewModel = hiltViewModel()
+    val billingVm: com.novella.app.viewmodel.BillingViewModel = hiltViewModel()
     val new by vm.new.collectAsState()
     val popular by vm.popular.collectAsState()
     val arabic by vm.arabic.collectAsState()
@@ -56,6 +57,7 @@ fun HomeScreen(
     val philosophy by vm.philosophy.collectAsState()
     val isRefreshing by vm.isRefreshing.collectAsState()
     val loadError by vm.loadError.collectAsState()
+    val isSubscribed by billingVm.isSubscribed.collectAsState()
 
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -65,6 +67,8 @@ fun HomeScreen(
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { padding ->
+        // Ensure BillingClient connection and restore on first entry
+        androidx.compose.runtime.LaunchedEffect(Unit) { billingVm.start() }
         val pullState = rememberPullToRefreshState()
         PullToRefreshBox(
             isRefreshing = isRefreshing,
@@ -75,15 +79,15 @@ fun HomeScreen(
             Column(Modifier.fillMaxSize()) {
                 // Show top progress bar only when refreshing with existing data
                 if (isRefreshing && hasAnyData) {
-                    LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                    LinearProgressIndicator(modifier = Modifier.fillMaxWidth().height(2.dp))
                 }
                 Column(Modifier.fillMaxSize().padding(16.dp)) {
                     val showPlaceholders = isRefreshing && !hasAnyData
-                    SectionRow("NEW", title = "جديد", items = new, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm)
-                    SectionRow("POPULAR", title = "الأكثر قراءة", items = popular, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm)
-                    SectionRow("ARABIC", title = "روايات عربية", items = arabic, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm)
-                    SectionRow("GLOBAL", title = "روايات عالمية", items = global, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm)
-                    SectionRow("PHILOSOPHY", title = "فلسفية", items = philosophy, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm)
+                    SectionRow("NEW", title = "جديد", items = new, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm, isSubscribed = isSubscribed)
+                    SectionRow("POPULAR", title = "الأكثر قراءة", items = popular, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm, isSubscribed = isSubscribed)
+                    SectionRow("ARABIC", title = "روايات عربية", items = arabic, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm, isSubscribed = isSubscribed)
+                    SectionRow("GLOBAL", title = "روايات عالمية", items = global, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm, isSubscribed = isSubscribed)
+                    SectionRow("PHILOSOPHY", title = "فلسفية", items = philosophy, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm, isSubscribed = isSubscribed)
                 }
             }
         }
@@ -111,7 +115,15 @@ fun HomeScreen(
 }
 
 @Composable
-private fun SectionRow(category: String, title: String, items: List<NovelEntity>, onClick: (String) -> Unit, isLoading: Boolean = false, vm: HomeViewModel) {
+private fun SectionRow(
+    category: String,
+    title: String,
+    items: List<NovelEntity>,
+    onClick: (String) -> Unit,
+    isLoading: Boolean = false,
+    vm: HomeViewModel,
+    isSubscribed: Boolean = false
+) {
     Text(text = title)
     Spacer(Modifier.height(8.dp))
     val categoryRefreshing by vm.categoryRefreshing.collectAsState()
@@ -119,7 +131,7 @@ private fun SectionRow(category: String, title: String, items: List<NovelEntity>
     val isSectionRefreshing = categoryRefreshing.contains(category)
     val hasError = categoryErrors.contains(category)
     if (isSectionRefreshing) {
-        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+        LinearProgressIndicator(modifier = Modifier.fillMaxWidth().height(2.dp))
     }
     val placeholderColor = if (isSystemInDarkTheme()) Color.DarkGray.copy(alpha = 0.2f) else Color.LightGray.copy(alpha = 0.3f)
     LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -165,14 +177,23 @@ private fun SectionRow(category: String, title: String, items: List<NovelEntity>
         } else {
             items(items) { novel ->
                 Column(modifier = Modifier.width(140.dp).clickable { onClick(novel.id) }) {
-                    AsyncImage(
+                    androidx.compose.foundation.layout.Box {
+                        AsyncImage(
                         model = novel.coverUrl,
                         contentDescription = novel.title,
                         modifier = Modifier
                             .fillMaxWidth()
                             .aspectRatio(3f / 4f),
                         contentScale = ContentScale.Crop
-                    )
+                        )
+                        // Show badge when novel is premium and user lacks entitlement
+                        val showBadge = novel.isPremium && !isSubscribed
+                        if (showBadge) {
+                            com.novella.app.ui.components.PremiumBadge(
+                                modifier = Modifier.align(Alignment.TopEnd).padding(6.dp)
+                            )
+                        }
+                    }
                     Spacer(Modifier.height(6.dp))
                     Text(text = novel.title, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     Text(text = novel.author, maxLines = 1, overflow = TextOverflow.Ellipsis)

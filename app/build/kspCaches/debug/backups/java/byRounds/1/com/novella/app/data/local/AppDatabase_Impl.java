@@ -53,17 +53,17 @@ public final class AppDatabase_Impl extends AppDatabase {
   @Override
   @NonNull
   protected SupportSQLiteOpenHelper createOpenHelper(@NonNull final DatabaseConfiguration config) {
-    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(1) {
+    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(2) {
       @Override
       public void createAllTables(@NonNull final SupportSQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS `novels` (`id` TEXT NOT NULL, `title` TEXT NOT NULL, `author` TEXT NOT NULL, `language` TEXT NOT NULL, `description` TEXT NOT NULL, `coverUrl` TEXT NOT NULL, `pdfUrl` TEXT NOT NULL, `category` TEXT NOT NULL, PRIMARY KEY(`id`))");
+        db.execSQL("CREATE TABLE IF NOT EXISTS `novels` (`id` TEXT NOT NULL, `title` TEXT NOT NULL, `author` TEXT NOT NULL, `language` TEXT NOT NULL, `description` TEXT NOT NULL, `coverUrl` TEXT NOT NULL, `pdfUrl` TEXT NOT NULL, `category` TEXT NOT NULL, `isPremium` INTEGER NOT NULL, PRIMARY KEY(`id`))");
         db.execSQL("CREATE TABLE IF NOT EXISTS `progress` (`novelId` TEXT NOT NULL, `currentPage` INTEGER NOT NULL, `totalPages` INTEGER NOT NULL, `percent` INTEGER NOT NULL, PRIMARY KEY(`novelId`))");
         db.execSQL("CREATE TABLE IF NOT EXISTS `bookmarks` (`id` TEXT NOT NULL, `novelId` TEXT NOT NULL, `page` INTEGER NOT NULL, `note` TEXT, PRIMARY KEY(`id`))");
         db.execSQL("CREATE TABLE IF NOT EXISTS `quotes` (`id` TEXT NOT NULL, `novelId` TEXT NOT NULL, `page` INTEGER NOT NULL, `text` TEXT NOT NULL, PRIMARY KEY(`id`))");
         db.execSQL("CREATE TABLE IF NOT EXISTS `downloads` (`novelId` TEXT NOT NULL, `isDownloaded` INTEGER NOT NULL, `localPath` TEXT NOT NULL, PRIMARY KEY(`novelId`))");
         db.execSQL("CREATE TABLE IF NOT EXISTS `purchases` (`productId` TEXT NOT NULL, `type` TEXT NOT NULL, `status` TEXT NOT NULL, PRIMARY KEY(`productId`))");
         db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7aa0b7b923f9320c9d8ad3adace06c85')");
+        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'aa6eb0f991c07fc21cdfb8b111e3dbb2')");
       }
 
       @Override
@@ -117,7 +117,7 @@ public final class AppDatabase_Impl extends AppDatabase {
       @NonNull
       public RoomOpenHelper.ValidationResult onValidateSchema(
           @NonNull final SupportSQLiteDatabase db) {
-        final HashMap<String, TableInfo.Column> _columnsNovels = new HashMap<String, TableInfo.Column>(8);
+        final HashMap<String, TableInfo.Column> _columnsNovels = new HashMap<String, TableInfo.Column>(9);
         _columnsNovels.put("id", new TableInfo.Column("id", "TEXT", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsNovels.put("title", new TableInfo.Column("title", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsNovels.put("author", new TableInfo.Column("author", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
@@ -126,6 +126,7 @@ public final class AppDatabase_Impl extends AppDatabase {
         _columnsNovels.put("coverUrl", new TableInfo.Column("coverUrl", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsNovels.put("pdfUrl", new TableInfo.Column("pdfUrl", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsNovels.put("category", new TableInfo.Column("category", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsNovels.put("isPremium", new TableInfo.Column("isPremium", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         final HashSet<TableInfo.ForeignKey> _foreignKeysNovels = new HashSet<TableInfo.ForeignKey>(0);
         final HashSet<TableInfo.Index> _indicesNovels = new HashSet<TableInfo.Index>(0);
         final TableInfo _infoNovels = new TableInfo("novels", _columnsNovels, _foreignKeysNovels, _indicesNovels);
@@ -205,7 +206,7 @@ public final class AppDatabase_Impl extends AppDatabase {
         }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "7aa0b7b923f9320c9d8ad3adace06c85", "7e10b8345e6fdcee4f3738bfa4a57d76");
+    }, "aa6eb0f991c07fc21cdfb8b111e3dbb2", "1a096cd3613c0e1649169f736ad2d2a8");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(config.context).name(config.name).callback(_openCallback).build();
     final SupportSQLiteOpenHelper _helper = config.sqliteOpenHelperFactory.create(_sqliteConfig);
     return _helper;

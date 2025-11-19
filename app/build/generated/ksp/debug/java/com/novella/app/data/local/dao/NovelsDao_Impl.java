@@ -39,7 +39,7 @@ public final class NovelsDao_Impl implements NovelsDao {
       @Override
       @NonNull
       protected String createQuery() {
-        return "INSERT OR REPLACE INTO `novels` (`id`,`title`,`author`,`language`,`description`,`coverUrl`,`pdfUrl`,`category`) VALUES (?,?,?,?,?,?,?,?)";
+        return "INSERT OR REPLACE INTO `novels` (`id`,`title`,`author`,`language`,`description`,`coverUrl`,`pdfUrl`,`category`,`isPremium`) VALUES (?,?,?,?,?,?,?,?,?)";
       }
 
       @Override
@@ -53,6 +53,8 @@ public final class NovelsDao_Impl implements NovelsDao {
         statement.bindString(6, entity.getCoverUrl());
         statement.bindString(7, entity.getPdfUrl());
         statement.bindString(8, entity.getCategory());
+        final int _tmp = entity.isPremium() ? 1 : 0;
+        statement.bindLong(9, _tmp);
       }
     };
   }
@@ -96,6 +98,7 @@ public final class NovelsDao_Impl implements NovelsDao {
           final int _cursorIndexOfCoverUrl = CursorUtil.getColumnIndexOrThrow(_cursor, "coverUrl");
           final int _cursorIndexOfPdfUrl = CursorUtil.getColumnIndexOrThrow(_cursor, "pdfUrl");
           final int _cursorIndexOfCategory = CursorUtil.getColumnIndexOrThrow(_cursor, "category");
+          final int _cursorIndexOfIsPremium = CursorUtil.getColumnIndexOrThrow(_cursor, "isPremium");
           final List<NovelEntity> _result = new ArrayList<NovelEntity>(_cursor.getCount());
           while (_cursor.moveToNext()) {
             final NovelEntity _item;
@@ -115,7 +118,11 @@ public final class NovelsDao_Impl implements NovelsDao {
             _tmpPdfUrl = _cursor.getString(_cursorIndexOfPdfUrl);
             final String _tmpCategory;
             _tmpCategory = _cursor.getString(_cursorIndexOfCategory);
-            _item = new NovelEntity(_tmpId,_tmpTitle,_tmpAuthor,_tmpLanguage,_tmpDescription,_tmpCoverUrl,_tmpPdfUrl,_tmpCategory);
+            final boolean _tmpIsPremium;
+            final int _tmp;
+            _tmp = _cursor.getInt(_cursorIndexOfIsPremium);
+            _tmpIsPremium = _tmp != 0;
+            _item = new NovelEntity(_tmpId,_tmpTitle,_tmpAuthor,_tmpLanguage,_tmpDescription,_tmpCoverUrl,_tmpPdfUrl,_tmpCategory,_tmpIsPremium);
             _result.add(_item);
           }
           return _result;
@@ -151,6 +158,7 @@ public final class NovelsDao_Impl implements NovelsDao {
           final int _cursorIndexOfCoverUrl = CursorUtil.getColumnIndexOrThrow(_cursor, "coverUrl");
           final int _cursorIndexOfPdfUrl = CursorUtil.getColumnIndexOrThrow(_cursor, "pdfUrl");
           final int _cursorIndexOfCategory = CursorUtil.getColumnIndexOrThrow(_cursor, "category");
+          final int _cursorIndexOfIsPremium = CursorUtil.getColumnIndexOrThrow(_cursor, "isPremium");
           final NovelEntity _result;
           if (_cursor.moveToFirst()) {
             final String _tmpId;
@@ -169,7 +177,11 @@ public final class NovelsDao_Impl implements NovelsDao {
             _tmpPdfUrl = _cursor.getString(_cursorIndexOfPdfUrl);
             final String _tmpCategory;
             _tmpCategory = _cursor.getString(_cursorIndexOfCategory);
-            _result = new NovelEntity(_tmpId,_tmpTitle,_tmpAuthor,_tmpLanguage,_tmpDescription,_tmpCoverUrl,_tmpPdfUrl,_tmpCategory);
+            final boolean _tmpIsPremium;
+            final int _tmp;
+            _tmp = _cursor.getInt(_cursorIndexOfIsPremium);
+            _tmpIsPremium = _tmp != 0;
+            _result = new NovelEntity(_tmpId,_tmpTitle,_tmpAuthor,_tmpLanguage,_tmpDescription,_tmpCoverUrl,_tmpPdfUrl,_tmpCategory,_tmpIsPremium);
           } else {
             _result = null;
           }

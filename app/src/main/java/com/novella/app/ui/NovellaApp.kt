@@ -35,6 +35,7 @@ import com.novella.app.ui.details.DetailsScreen
 import com.novella.app.ui.reader.ReaderScreen
 import com.novella.app.ui.library.LibraryScreen
 import com.novella.app.ui.search.SearchScreen
+import com.novella.app.ui.subscription.SubscriptionScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -87,7 +88,11 @@ fun NovellaApp() {
                         arguments = listOf(navArgument("novelId") { type = NavType.StringType })
                     ) { backStack ->
                         val id = backStack.arguments?.getString("novelId").orEmpty()
-                        DetailsScreen(novelId = id, onRead = { navController.navigate("reader/$id") })
+                        DetailsScreen(
+                            novelId = id,
+                            onRead = { navController.navigate("reader/$id") },
+                            onOpenSubscription = { navController.navigate("subscription") }
+                        )
                     }
                     composable(
                         route = "reader/{novelId}",
@@ -98,6 +103,7 @@ fun NovellaApp() {
                     }
                     composable("library") { LibraryScreen() }
                     composable("search") { SearchScreen(onOpenDetails = { id -> navController.navigate("details/$id") }) }
+                    composable("subscription") { SubscriptionScreen() }
                 }
             }
         }

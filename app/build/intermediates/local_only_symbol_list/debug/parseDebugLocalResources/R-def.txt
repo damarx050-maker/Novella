@@ -35,6 +35,7 @@ string subscribe_monthly
 string subscribe_now
 string subscribe_yearly
 string try_another
+string view_plans
 string welcome_text
 string yearly_plan_price
 string yearly_plan_subtitle

@@ -1,6 +1,8 @@
 package com.novella.app.ui.subscription
 
 import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -44,6 +46,7 @@ fun SubscriptionScreen(vm: BillingViewModel = hiltViewModel()) {
             title = UiStrings.monthlyPlanTitle(),
             subtitle = UiStrings.monthlyPlanSubtitle(),
             price = UiStrings.monthlyPlanPrice(),
+            ctaText = UiStrings.subscribeMonthly(),
             onClick = {
                 val act = context as? Activity ?: return@PlanCard
                 vm.subscribeMonthly(act, BillingProductIds.MONTHLY_SUB)
@@ -53,14 +56,20 @@ fun SubscriptionScreen(vm: BillingViewModel = hiltViewModel()) {
             title = UiStrings.yearlyPlanTitle(),
             subtitle = UiStrings.yearlyPlanSubtitle(),
             price = UiStrings.yearlyPlanPrice(),
+            ctaText = UiStrings.subscribeYearly(),
             onClick = {
                 val act = context as? Activity ?: return@PlanCard
-                vm.subscribeMonthly(act, BillingProductIds.YEARLY_SUB)
+                vm.subscribeYearly(act, BillingProductIds.YEARLY_SUB)
             }
         )
         Spacer(Modifier.height(12.dp))
         Button(
-            onClick = { /* TODO: deep link to manage subscriptions */ },
+            onClick = {
+                val pkg = context.packageName
+                val uri = Uri.parse("https://play.google.com/store/account/subscriptions?package=${'$'}pkg")
+                val intent = Intent(Intent.ACTION_VIEW, uri)
+                context.startActivity(intent)
+            },
             colors = ButtonDefaults.buttonColors(containerColor = NovellaSurfaceVariant),
             modifier = Modifier.fillMaxWidth().height(48.dp)
         ) {
@@ -70,7 +79,7 @@ fun SubscriptionScreen(vm: BillingViewModel = hiltViewModel()) {
 }
 
 @Composable
-private fun PlanCard(title: String, subtitle: String, price: String, onClick: () -> Unit) {
+private fun PlanCard(title: String, subtitle: String, price: String, ctaText: String = UiStrings.subscribeNow(), onClick: () -> Unit) {
     Card(
         colors = CardDefaults.cardColors(containerColor = NovellaSurface),
         modifier = Modifier.fillMaxWidth()
@@ -83,7 +92,7 @@ private fun PlanCard(title: String, subtitle: String, price: String, onClick: ()
                 Button(
                     onClick = onClick,
                     colors = ButtonDefaults.buttonColors(containerColor = NovellaPrimary)
-                ) { Text(UiStrings.subscribeNow(), color = Color.White) }
+                ) { Text(ctaText, color = Color.White) }
             }
         }
     }
