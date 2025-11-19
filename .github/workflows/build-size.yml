@@ -1,0 +1,36 @@
+name: Check Build Size
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-size:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Assemble Release APK
+        run: |
+          ./gradlew --no-daemon :app:assembleRelease
+
+      - name: Check APK size (<= 20MB)
+        run: |
+          APK=$(ls app/build/outputs/apk/release/*.apk | head -n1)
+          if [ -z "$APK" ]; then echo "No APK found"; exit 1; fi
+          SIZE_BYTES=$(stat -c%s "$APK")
+          SIZE_MB=$(awk -v s="$SIZE_BYTES" 'BEGIN{printf "%.2f", s/1024/1024}')
+          echo "APK=$APK"
+          echo "SIZE_MB=$SIZE_MB"
+          MAX_MB=20
+          awk -v s="$SIZE_MB" -v m="$MAX_MB" 'BEGIN{ if (s>m){ exit 1 } }'
+        shell: bash

@@ -1,0 +1,44 @@
+name: Code Coverage (JaCoCo)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Run tests and build coverage report
+        run: |
+          ./gradlew --no-daemon testDebugUnitTest jacocoTestReport
+
+      - name: Enforce 80% line coverage
+        run: |
+          REPORT=app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
+          if [ ! -f "$REPORT" ]; then echo "Coverage report not found: $REPORT"; exit 1; fi
+          python3 - <<'PY'
+          import xml.etree.ElementTree as ET
+          import sys
+          p='app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml'
+          t=ET.parse(p).getroot()
+          missed=covered=0
+          for c in t.iter('counter'):
+              if c.attrib.get('type')=='LINE':
+                  missed += int(c.attrib['missed'])
+                  covered += int(c.attrib['covered'])
+          total = missed + covered
+          pct = (covered/total*100.0) if total else 0.0
+          print(f"LINE_COVERAGE={pct:.2f}% (covered={covered}, missed={missed})")
+          sys.exit(0 if pct >= 80.0 else 1)
+          PY

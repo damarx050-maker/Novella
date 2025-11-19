@@ -1,0 +1,43 @@
+name: Translation Keys Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  translations:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify string keys across locales
+        run: |
+          python3 - <<'PY'
+          import os, glob, xml.etree.ElementTree as ET, sys
+          base='app/src/main/res/values/strings.xml'
+          if not os.path.isfile(base):
+              print('Base strings.xml not found at', base)
+              sys.exit(1)
+          def keys(path):
+              t=ET.parse(path).getroot()
+              return {e.attrib['name'] for e in t.findall('string') if 'name' in e.attrib}
+          base_keys = keys(base)
+          fails=0
+          for path in glob.glob('app/src/main/res/values-*/strings.xml'):
+              loc = os.path.basename(os.path.dirname(path))
+              k = keys(path)
+              missing = sorted(list(base_keys - k))
+              extra = sorted(list(k - base_keys))
+              if missing:
+                  print(f"[MISSING] {loc}: {', '.join(missing)}")
+                  fails += 1
+              if extra:
+                  print(f"[EXTRA]   {loc}: {', '.join(extra)}")
+          if fails:
+              print(f"Translation check failed in {fails} locale(s)")
+              sys.exit(1)
+          print('All locale string keys are consistent with base.')
+          PY

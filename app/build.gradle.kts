@@ -1,4 +1,5 @@
 import java.io.File
+import org.gradle.testing.jacoco.tasks.JacocoReport
 
 plugins {
     id("com.android.application")
@@ -8,6 +9,7 @@ plugins {
     // Apply Google Services plugin at the app module so Firebase SDKs read google-services.json
     id("com.google.gms.google-services")
     id("com.google.dagger.hilt.android")
+    id("jacoco")
 }
 
 android {
@@ -68,6 +70,44 @@ android {
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
         kotlinOptions.jvmTarget = "21"
     }
+}
+
+// Jacoco coverage report for unit tests (debug)
+tasks.register<JacocoReport>("jacocoTestReport") {
+    dependsOn("testDebugUnitTest")
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        csv.required.set(false)
+    }
+
+    val fileFilter = listOf(
+        "**/R.class",
+        "**/R$*.class",
+        "**/BuildConfig.*",
+        "**/Manifest*.*",
+        "**/*Test*.*",
+        "**/*Hilt*.*",
+        "**/hilt_*/**"
+    )
+
+    val kotlinDebugTree = fileTree("${buildDir}/tmp/kotlin-classes/debug") {
+        exclude(fileFilter)
+    }
+    val javaDebugTree = fileTree("${buildDir}/intermediates/javac/debug/classes") {
+        exclude(fileFilter)
+    }
+
+    classDirectories.setFrom(files(kotlinDebugTree, javaDebugTree))
+    sourceDirectories.setFrom(files("src/main/java", "src/main/kotlin"))
+    executionData.setFrom(fileTree(buildDir) {
+        include(
+            "**/jacoco/testDebugUnitTest.exec",
+            "**/outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec",
+            "**/*.ec"
+        )
+    })
 }
 
 dependencies {

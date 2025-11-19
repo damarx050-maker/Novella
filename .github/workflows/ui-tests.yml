@@ -1,0 +1,39 @@
+name: UI Tests (Emulator)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  connected-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [ "Nexus S", "Nexus 5" ] # ~4" and ~5" profiles
+        api-level: [ 29 ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Prepare app and tests
+        run: |
+          ./gradlew --no-daemon :app:assembleDebug :app:assembleAndroidTest
+
+      - name: Run connected tests on ${{ matrix.profile }} (API ${{ matrix.api-level }})
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          arch: x86_64
+          profile: ${{ matrix.profile }}
+          target: default
+          emulator-options: -no-snapshot -noaudio -no-boot-anim -camera-back none
+          script: ./gradlew --no-daemon :app:connectedDebugAndroidTest

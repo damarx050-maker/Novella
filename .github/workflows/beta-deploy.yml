@@ -1,0 +1,58 @@
+name: Beta Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      track:
+        description: "Deployment target (firebase|play)"
+        required: true
+        default: "firebase"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Build release artifacts (AAB+APK)
+        run: |
+          ./gradlew --no-daemon :app:bundleRelease :app:assembleRelease
+      # Artifacts at:
+      # - app/build/outputs/apk/release/app-release.apk
+      # - app/build/outputs/bundle/release/app-release.aab
+
+  firebase:
+    needs: build
+    if: ${{ github.event.inputs.track == 'firebase' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Upload to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID_ANDROID }}
+          token: ${{ secrets.FIREBASE_TOKEN }}
+          groups: beta-testers
+          file: app/build/outputs/apk/release/app-release.apk
+
+  play:
+    needs: build
+    if: ${{ github.event.inputs.track == 'play' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Upload to Google Play Internal Testing
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: com.novella.app
+          releaseFiles: app/build/outputs/bundle/release/app-release.aab
+          track: internal
+          status: draft

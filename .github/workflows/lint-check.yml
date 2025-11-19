@@ -1,0 +1,32 @@
+name: Android Lint Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Run lint (debug)
+        run: ./gradlew --no-daemon :app:lintDebug
+
+      - name: Summarize lint results and fail on errors
+        run: |
+          REPORT=app/build/reports/lint-results-debug.xml
+          if [ ! -f "$REPORT" ]; then echo "Lint report not found: $REPORT"; exit 1; fi
+          ERRORS=$(grep -c 'severity="Error"' "$REPORT" || true)
+          WARNINGS=$(grep -c 'severity="Warning"' "$REPORT" || true)
+          echo "Lint: Errors=$ERRORS, Warnings=$WARNINGS"
+          if [ "$ERRORS" -gt 0 ]; then echo "Lint errors found"; exit 1; fi
