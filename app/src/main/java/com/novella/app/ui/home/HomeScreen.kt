@@ -83,11 +83,11 @@ fun HomeScreen(
                 }
                 Column(Modifier.fillMaxSize().padding(16.dp)) {
                     val showPlaceholders = isRefreshing && !hasAnyData
-                    SectionRow("NEW", title = "جديد", items = new, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm, isSubscribed = isSubscribed)
-                    SectionRow("POPULAR", title = "الأكثر قراءة", items = popular, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm, isSubscribed = isSubscribed)
-                    SectionRow("ARABIC", title = "روايات عربية", items = arabic, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm, isSubscribed = isSubscribed)
-                    SectionRow("GLOBAL", title = "روايات عالمية", items = global, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm, isSubscribed = isSubscribed)
-                    SectionRow("PHILOSOPHY", title = "فلسفية", items = philosophy, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm, isSubscribed = isSubscribed)
+                    SectionRow("NEW", title = "الجديدة", items = new, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm, isSubscribed = isSubscribed)
+                    SectionRow("POPULAR", title = "الشائعة", items = popular, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm, isSubscribed = isSubscribed)
+                    SectionRow("ARABIC", title = "الروايات العربية", items = arabic, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm, isSubscribed = isSubscribed)
+                    SectionRow("GLOBAL", title = "الروايات العالمية", items = global, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm, isSubscribed = isSubscribed)
+                    SectionRow("PHILOSOPHY", title = "الفلسفة", items = philosophy, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm, isSubscribed = isSubscribed)
                 }
             }
         }
