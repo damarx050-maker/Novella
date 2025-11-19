@@ -109,24 +109,19 @@ This project uses GitHub Actions to validate code quality, build health, and rel
 
 ### Workflows
 
-- Verify Java Version: Ensures JDK 21 is used and builds the app.
-  - Runs: [java-check.yml](https://github.com/damarx050-maker/Novella/actions/workflows/java-check.yml)
-- Run Unit Tests: Executes unit tests and summarizes results.
-  - Runs: [test.yml](https://github.com/damarx050-maker/Novella/actions/workflows/test.yml)
-- Check Build Size: Builds release APK and fails if size > 20MB.
-  - Runs: [build-size.yml](https://github.com/damarx050-maker/Novella/actions/workflows/build-size.yml)
-- Android Lint Check: Runs lint on debug variant, fails on errors.
-  - Runs: [lint-check.yml](https://github.com/damarx050-maker/Novella/actions/workflows/lint-check.yml)
-- Code Coverage (JaCoCo): Generates coverage report; fails if < 80% and publishes a badge.
-  - Runs: [coverage.yml](https://github.com/damarx050-maker/Novella/actions/workflows/coverage.yml)
-- Translation Keys Check: Verifies all locales have the same string keys as base.
-  - Runs: [translation-check.yml](https://github.com/damarx050-maker/Novella/actions/workflows/translation-check.yml)
-- Secrets Scan: Scans repository for potential secrets.
-  - Runs: [security-check.yml](https://github.com/damarx050-maker/Novella/actions/workflows/security-check.yml)
-- Beta Deployment: Manual release to Firebase App Distribution or Google Play Internal track.
-  - Runs: [beta-deploy.yml](https://github.com/damarx050-maker/Novella/actions/workflows/beta-deploy.yml)
-- UI Tests (Emulator): Runs connected tests on ~4" and ~5" emulators.
-  - Runs: [ui-tests.yml](https://github.com/damarx050-maker/Novella/actions/workflows/ui-tests.yml)
+- `java-check.yml`: يتحقق من إصدار JDK ويشغّل البناء الأساسي.
+- `test.yml`: يشغّل اختبارات الوحدة ويطبع النتائج.
+- `build-size.yml`: يبني نسخة Release ويحسب حجم الحزمة، ويفشل إذا تجاوزت 20MB.
+- `lint-check.yml`: يشغّل فحص الكود (Lint) ويطبع التحذيرات والأخطاء.
+- `coverage.yml`: يشغّل Jacoco ويحسب نسبة التغطية، ويفشل إذا كانت أقل من 80%.
+- `translation-check.yml`: يتحقق من تساوي مفاتيح الترجمات بين جميع اللغات.
+- `security-check.yml`: يفحص عدم وجود أسرار أو مفاتيح حساسة في الكود.
+- `beta-deploy.yml`: ينشر نسخة تجريبية إلى Firebase App Distribution أو Google Play Internal Testing.
+- `ui-tests.yml`: يشغّل اختبارات UI على محاكيات بشاشات صغيرة.
+
+### روابط
+
+- صفحة Actions: [GitHub Actions](https://github.com/damarx050-maker/Novella/actions)
 
 ### Badges
 
