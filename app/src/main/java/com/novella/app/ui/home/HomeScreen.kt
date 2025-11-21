@@ -52,7 +52,6 @@ fun HomeScreen(
     val billingVm: com.novella.app.viewmodel.BillingViewModel = hiltViewModel()
     val new by vm.new.collectAsState()
     val popular by vm.popular.collectAsState()
-    val arabic by vm.arabic.collectAsState()
     val global by vm.global.collectAsState()
     val philosophy by vm.philosophy.collectAsState()
     val isRefreshing by vm.isRefreshing.collectAsState()
@@ -62,7 +61,7 @@ fun HomeScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-    val hasAnyData = new.isNotEmpty() || popular.isNotEmpty() || arabic.isNotEmpty() || global.isNotEmpty() || philosophy.isNotEmpty()
+    val hasAnyData = new.isNotEmpty() || popular.isNotEmpty() || global.isNotEmpty() || philosophy.isNotEmpty()
 
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
@@ -85,7 +84,6 @@ fun HomeScreen(
                     val showPlaceholders = isRefreshing && !hasAnyData
                     SectionRow("NEW", title = "الجديدة", items = new, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm, isSubscribed = isSubscribed)
                     SectionRow("POPULAR", title = "الشائعة", items = popular, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm, isSubscribed = isSubscribed)
-                    SectionRow("ARABIC", title = "الروايات العربية", items = arabic, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm, isSubscribed = isSubscribed)
                     SectionRow("GLOBAL", title = "الروايات العالمية", items = global, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm, isSubscribed = isSubscribed)
                     SectionRow("PHILOSOPHY", title = "الفلسفة", items = philosophy, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm, isSubscribed = isSubscribed)
                 }
