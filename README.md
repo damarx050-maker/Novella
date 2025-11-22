@@ -50,6 +50,43 @@ Removed (no longer accepted): ARABIC, GLOBAL. Any existing local entries with th
 
 When adding a new novel ensure its `category` field equals one of the allowed values above; other values will be ignored and deleted on sync.
 
+## CI/CD Secrets (الأسرار المطلوبة للنشر التجريبي)
+
+يستخدم مسار النشر التجريبي (Beta Deployment) وأي نشر لاحق ثلاثة أسرار يجب تعريفها في المستودع. إذا لم تكن موجودة سيتم تخطي خطوة الرفع تلقائياً بدون فشل كامل للبناء.
+
+| Secret | Purpose | Where to get it | Notes |
+|--------|---------|-----------------|-------|
+| `FIREBASE_APP_ID_ANDROID` | يحدد تطبيق Firebase Android الهدف للتوزيع | Firebase Console → Project Settings → Your Apps (App ID) | يبدأ عادة بـ: `1:XXXXXXXXXXXX:android:...` |
+| `FIREBASE_TOKEN` | صلاحية سطر الأوامر للرفع إلى Firebase App Distribution | عبر Firebase CLI: تثبيت الأداة ثم `firebase login:ci` | الناتج سلسلة قصيرة؛ خزّنها كسِر |
+| `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON` | حساب خدمة للوصول إلى Google Play Internal Testing | Google Cloud Console: أنشئ Service Account بصلاحية Play Android Developer API ثم أنشئ مفتاح JSON | احفظ كل محتوى ملف الـ JSON كنص في السر |
+
+### خطوات إنشاء الأسرار في GitHub
+
+1. افتح المستودع في GitHub.
+2. Settings → Secrets and variables → Actions.
+3. اضغط "New repository secret" لكل عنصر.
+4. أدخل الاسم تماماً كما في الجدول والقيمة المناسبة ثم حفظ.
+
+### الحصول على FIREBASE_TOKEN
+
+```bash
+npm install -g firebase-tools
+firebase login
+firebase login:ci
+# انسخ التوكن الناتج وأضفه كسِر FIREBASE_TOKEN
+```
+
+### ملاحظات تشغيل المسارات
+
+- إذا كان أي سر مفقود يتم عرض رسالة تخطي في الـ workflow بدلاً من فشل.
+- المسار `beta-deploy.yml` يبني AAB/APK أولاً ثم يحاول الرفع (Firebase أو Play) حسب الإدخال `track`.
+- الأسرار لا تُطبع في السجل؛ تأكد من عدم وضعها في الكود أو README.
+- يمكن تحديث أو تدوير `FIREBASE_TOKEN` بإعادة تنفيذ الأمر `firebase login:ci`.
+
+### سياسة البيانات غير الصحيحة
+
+أي رواية تحتوي تصنيفاً خارج القيم السبعة المسموحة سيتم حذفها أثناء المزامنة (عمليات `refreshAll` / `refreshCategory` تقوم بـ purge وفحص). أزل التصنيفات القديمة من مصدر البيانات في Firestore لتفادي إعادة إدراجها.
+
 ### 2) Google Sign-In (Auth)
 
 - In Firebase console, enable Google provider and set SHA-1.
