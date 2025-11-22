@@ -75,21 +75,33 @@ class NovelsRepository(
         quotesDao.add(QuoteEntity(id = "$novelId-${'$'}page-${'$'}{text.hashCode()}", novelId = novelId, page = page, text = text))
     }
 
-    // Manual refresh used by retry UX; does one-shot fetch to avoid duplicating listeners
+    // Manual refresh used by retry UX; does one-shot fetch for allowed categories only
     suspend fun refreshAll(): Result<Unit> = try {
-        val categories = listOf("NEW", "POPULAR", "ARABIC", "GLOBAL", "PHILOSOPHY")
+        val categories = listOf(
+            "NEW",
+            "POPULAR",
+            "PHILOSOPHY",
+            "HORROR",
+            "ROMANCE",
+            "HISTORICAL",
+            "FANTASY"
+        )
         for (c in categories) {
             val list = remote.fetchCategoryOnce(c)
-            novelsDao.upsertAll(list)
+            novelsDao.upsertAll(list.filter { it.category in categories })
         }
         Result.success(Unit)
     } catch (e: Exception) {
         Result.failure(e)
     }
 
-    // Manual refresh for a single category
+    // Manual refresh for a single category; ignores removed/unsupported categories
     suspend fun refreshCategory(category: String): Result<Unit> = try {
-        val list = remote.fetchCategoryOnce(category)
+        val allowed = setOf(
+            "NEW", "POPULAR", "PHILOSOPHY", "HORROR", "ROMANCE", "HISTORICAL", "FANTASY"
+        )
+        if (category !in allowed) return Result.success(Unit)
+        val list = remote.fetchCategoryOnce(category).filter { it.category in allowed }
         novelsDao.upsertAll(list)
         Result.success(Unit)
     } catch (e: Exception) {

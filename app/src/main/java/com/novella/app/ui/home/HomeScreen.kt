@@ -52,8 +52,11 @@ fun HomeScreen(
     val billingVm: com.novella.app.viewmodel.BillingViewModel = hiltViewModel()
     val new by vm.new.collectAsState()
     val popular by vm.popular.collectAsState()
-    val global by vm.global.collectAsState()
     val philosophy by vm.philosophy.collectAsState()
+    val horror by vm.horror.collectAsState()
+    val romance by vm.romance.collectAsState()
+    val historical by vm.historical.collectAsState()
+    val fantasy by vm.fantasy.collectAsState()
     val isRefreshing by vm.isRefreshing.collectAsState()
     val loadError by vm.loadError.collectAsState()
     val isSubscribed by billingVm.isSubscribed.collectAsState()
@@ -61,7 +64,7 @@ fun HomeScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-    val hasAnyData = new.isNotEmpty() || popular.isNotEmpty() || global.isNotEmpty() || philosophy.isNotEmpty()
+    val hasAnyData = new.isNotEmpty() || popular.isNotEmpty() || philosophy.isNotEmpty() || horror.isNotEmpty() || romance.isNotEmpty() || historical.isNotEmpty() || fantasy.isNotEmpty()
 
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
@@ -84,8 +87,11 @@ fun HomeScreen(
                     val showPlaceholders = isRefreshing && !hasAnyData
                     SectionRow("NEW", title = "الجديدة", items = new, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm, isSubscribed = isSubscribed)
                     SectionRow("POPULAR", title = "الشائعة", items = popular, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm, isSubscribed = isSubscribed)
-                    SectionRow("GLOBAL", title = "الروايات العالمية", items = global, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm, isSubscribed = isSubscribed)
                     SectionRow("PHILOSOPHY", title = "الفلسفة", items = philosophy, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm, isSubscribed = isSubscribed)
+                    SectionRow("HORROR", title = "الرعب", items = horror, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm, isSubscribed = isSubscribed)
+                    SectionRow("ROMANCE", title = "الرومانسية (حب)", items = romance, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm, isSubscribed = isSubscribed)
+                    SectionRow("HISTORICAL", title = "التاريخي", items = historical, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm, isSubscribed = isSubscribed)
+                    SectionRow("FANTASY", title = "الفنتازيا", items = fantasy, onClick = onOpenDetails, isLoading = showPlaceholders, vm = vm, isSubscribed = isSubscribed)
                 }
             }
         }

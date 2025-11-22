@@ -16,9 +16,11 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(private val repo: NovelsRepository) : ViewModel() {
     val new: StateFlow<List<NovelEntity>> = repo.novelsByCategory("NEW").stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
     val popular: StateFlow<List<NovelEntity>> = repo.novelsByCategory("POPULAR").stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
-    val arabic: StateFlow<List<NovelEntity>> = repo.novelsByCategory("ARABIC").stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
-    val global: StateFlow<List<NovelEntity>> = repo.novelsByCategory("GLOBAL").stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
     val philosophy: StateFlow<List<NovelEntity>> = repo.novelsByCategory("PHILOSOPHY").stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+    val horror: StateFlow<List<NovelEntity>> = repo.novelsByCategory("HORROR").stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+    val romance: StateFlow<List<NovelEntity>> = repo.novelsByCategory("ROMANCE").stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+    val historical: StateFlow<List<NovelEntity>> = repo.novelsByCategory("HISTORICAL").stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+    val fantasy: StateFlow<List<NovelEntity>> = repo.novelsByCategory("FANTASY").stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     val loadError = MutableStateFlow(false)
     val isRefreshing = MutableStateFlow(false)
@@ -32,7 +34,9 @@ class HomeViewModel @Inject constructor(private val repo: NovelsRepository) : Vi
         viewModelScope.launch {
             isRefreshing.value = true
             loadError.value = false
-            val categories = listOf("NEW", "POPULAR", "ARABIC", "GLOBAL", "PHILOSOPHY")
+            val categories = listOf(
+                "NEW", "POPULAR", "PHILOSOPHY", "HORROR", "ROMANCE", "HISTORICAL", "FANTASY"
+            )
             val failed = mutableSetOf<String>()
             for (c in categories) {
                 val r = repo.refreshCategory(c)
