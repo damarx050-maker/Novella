@@ -78,18 +78,17 @@ class NovelsRepository(
     // Manual refresh used by retry UX; does one-shot fetch for allowed categories only
     suspend fun refreshAll(): Result<Unit> = try {
         val categories = listOf(
-            "NEW",
-            "POPULAR",
-            "PHILOSOPHY",
-            "HORROR",
-            "ROMANCE",
-            "HISTORICAL",
-            "FANTASY"
+            "NEW", "POPULAR", "PHILOSOPHY", "HORROR", "ROMANCE", "HISTORICAL", "FANTASY"
         )
+        // Purge anything obsolete first
+        novelsDao.deleteByCategories(listOf("ARABIC", "GLOBAL"))
+        // Fetch each allowed category and upsert only allowed ones
         for (c in categories) {
             val list = remote.fetchCategoryOnce(c)
             novelsDao.upsertAll(list.filter { it.category in categories })
         }
+        // Final prune just in case remote delivered stray entries
+        novelsDao.pruneToAllowed(categories)
         Result.success(Unit)
     } catch (e: Exception) {
         Result.failure(e)
@@ -97,12 +96,11 @@ class NovelsRepository(
 
     // Manual refresh for a single category; ignores removed/unsupported categories
     suspend fun refreshCategory(category: String): Result<Unit> = try {
-        val allowed = setOf(
-            "NEW", "POPULAR", "PHILOSOPHY", "HORROR", "ROMANCE", "HISTORICAL", "FANTASY"
-        )
+        val allowed = setOf("NEW", "POPULAR", "PHILOSOPHY", "HORROR", "ROMANCE", "HISTORICAL", "FANTASY")
         if (category !in allowed) return Result.success(Unit)
         val list = remote.fetchCategoryOnce(category).filter { it.category in allowed }
         novelsDao.upsertAll(list)
+        novelsDao.pruneToAllowed(allowed.toList())
         Result.success(Unit)
     } catch (e: Exception) {
         Result.failure(e)

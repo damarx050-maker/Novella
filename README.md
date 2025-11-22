@@ -6,7 +6,7 @@ Kotlin + Jetpack Compose + Room + Firebase (Auth, Firestore, Storage) + Google P
 
 - Login screen with Google button (wire to Firebase Auth)
 - Onboarding pager (3 slides), shown after first login
-- Home with five horizontal sections (New, Popular, Arabic, Global, Philosophy)
+- Home with categorized horizontal sections (New, Popular, Philosophy, Horror, Romance, Historical, Fantasy)
 - Details screen with cover, metadata, Start Reading + Download Offline buttons
 - Reader skeleton with day/night toggle and progress text
 - Library skeleton sections (Continue, Offline, Favorites)
@@ -30,7 +30,25 @@ Kotlin + Jetpack Compose + Room + Firebase (Auth, Firestore, Storage) + Google P
 3. Enable: Authentication (Google), Firestore, and Storage.
 4. Firestore collection `Novels` documents should include fields:
    - `id:String`, `title:String`, `author:String`, `description:String`, `coverUrl:String`, `pdfUrl:String`,
-     `category:String (NEW|POPULAR|ARABIC|GLOBAL|PHILOSOPHY)`, `language:String (AR|EN)`, `price:Int (5)`
+     `category:String (NEW|POPULAR|PHILOSOPHY|HORROR|ROMANCE|HISTORICAL|FANTASY)`, `language:String (AR|EN)`, `price:Int (5)`
+
+### Categories (التصنيفات)
+
+Allowed category values for any novel document (must match exactly, case-sensitive):
+
+| English      | Arabic            | Value |
+|--------------|-------------------|-------|
+| New          | الجديدة           | NEW   |
+| Popular      | الشائعة           | POPULAR |
+| Philosophy   | الفلسفة           | PHILOSOPHY |
+| Horror       | الرعب             | HORROR |
+| Romance      | الرومانسية (حب)   | ROMANCE |
+| Historical   | التاريخي          | HISTORICAL |
+| Fantasy      | الفنتازيا         | FANTASY |
+
+Removed (no longer accepted): ARABIC, GLOBAL. Any existing local entries with these categories are purged during refresh.
+
+When adding a new novel ensure its `category` field equals one of the allowed values above; other values will be ignored and deleted on sync.
 
 ### 2) Google Sign-In (Auth)
 

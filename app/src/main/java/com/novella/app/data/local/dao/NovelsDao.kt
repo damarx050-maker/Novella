@@ -17,4 +17,10 @@ interface NovelsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertAll(items: List<NovelEntity>)
+
+    @Query("DELETE FROM novels WHERE category IN (:obsolete)")
+    suspend fun deleteByCategories(obsolete: List<String>)
+
+    @Query("DELETE FROM novels WHERE category NOT IN (:allowed)")
+    suspend fun pruneToAllowed(allowed: List<String>)
 }
