@@ -28,12 +28,33 @@ jobs:
       # - app/build/outputs/apk/release/app-release.apk
       # - app/build/outputs/bundle/release/app-release.aab
 
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-artifacts
+          path: |
+            app/build/outputs/apk/release/app-release.apk
+            app/build/outputs/bundle/release/app-release.aab
+
   firebase:
     needs: build
     if: ${{ github.event.inputs.track == 'firebase' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Download release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-artifacts
+      - name: Validate Firebase secrets
+        env:
+          FIREBASE_APP_ID_ANDROID: ${{ secrets.FIREBASE_APP_ID_ANDROID }}
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          if [ -z "${FIREBASE_APP_ID_ANDROID}" ] || [ -z "${FIREBASE_TOKEN}" ]; then
+            echo "Missing Firebase secrets. Define FIREBASE_APP_ID_ANDROID and FIREBASE_TOKEN in repository Secrets." >&2
+            exit 1
+          fi
       - name: Upload to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
@@ -48,6 +69,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Download release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-artifacts
+      - name: Validate Play secrets
+        env:
+          GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+        run: |
+          if [ -z "${GOOGLE_PLAY_SERVICE_ACCOUNT_JSON}" ]; then
+            echo "Missing Google Play service account JSON secret (GOOGLE_PLAY_SERVICE_ACCOUNT_JSON)." >&2
+            exit 1
+          fi
       - name: Upload to Google Play Internal Testing
         uses: r0adkll/upload-google-play@v1
         with:
